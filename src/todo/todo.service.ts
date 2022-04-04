@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Like, Repository } from "typeorm";
+import { Like, Repository, SelectQueryBuilder } from 'typeorm';
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -66,7 +66,7 @@ export class TodoService {
     }
     return this.todoRepository.find({ withDeleted: true});
   }*/
-  findAll(searchTodoDto: SearchTodoDto): Promise<TodoEntity[]> {
+  findAll(searchTodoDto: SearchTodoDto): SelectQueryBuilder<TodoEntity> {
     const criterias = [];
     if (searchTodoDto.status) {
       criterias.push({ status: searchTodoDto.status });
@@ -75,9 +75,20 @@ export class TodoService {
       criterias.push({ name: Like(`%${searchTodoDto.criteria}%`) });
       criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
     }
+    console.log(criterias);
     if (criterias.length) {
-      return this.todoRepository.find({ withDeleted: true, where: criterias });
+      const result = this.todoRepository
+        .createQueryBuilder('todo')
+        .from(TodoEntity, 'todo')
+        .where('todo.name LIKE :name', { name: searchTodoDto.criteria })
+        .orWhere('todo.description LIKE :description', {
+          description: searchTodoDto.criteria,
+        })
+        .andWhere('todo.status = status', { status: searchTodoDto.status });
+      return result;
     }
-    return this.todoRepository.find({ withDeleted: true});
+    return this.todoRepository
+      .createQueryBuilder('todo')
+      .from(TodoEntity, 'todo');
   }
 }
