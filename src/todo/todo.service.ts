@@ -66,7 +66,7 @@ export class TodoService {
     }
     return this.todoRepository.find({ withDeleted: true});
   }*/
-  findAll(searchTodoDto: SearchTodoDto): SelectQueryBuilder<TodoEntity> {
+  findAll(searchTodoDto: SearchTodoDto) {
     const criterias = [];
     if (searchTodoDto.status) {
       criterias.push({ status: searchTodoDto.status });
@@ -75,20 +75,19 @@ export class TodoService {
       criterias.push({ name: Like(`%${searchTodoDto.criteria}%`) });
       criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
     }
-    console.log(criterias);
+    console.log('this is ' + criterias);
+    console.log(searchTodoDto.criteria);
+    console.log(searchTodoDto.status);
     if (criterias.length) {
       const result = this.todoRepository
         .createQueryBuilder('todo')
-        .from(TodoEntity, 'todo')
-        .where('todo.name LIKE :name', { name: searchTodoDto.criteria })
-        .orWhere('todo.description LIKE :description', {
+        .where('todo.name = :name', { name: searchTodoDto.criteria })
+        .orWhere('todo.description = :description', {
           description: searchTodoDto.criteria,
         })
-        .andWhere('todo.status = status', { status: searchTodoDto.status });
-      return result;
+        .andWhere('todo.status = :status', { status: searchTodoDto.status });
+      return result.getMany();
     }
-    return this.todoRepository
-      .createQueryBuilder('todo')
-      .from(TodoEntity, 'todo');
+    return this.todoRepository.createQueryBuilder('todo').getMany();
   }
 }

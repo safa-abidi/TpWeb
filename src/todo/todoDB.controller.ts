@@ -5,18 +5,20 @@ import {
   Get,
   Param,
   Patch,
-  Post, Query,
-  Req
-} from "@nestjs/common";
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { Todo } from './Model/todo.model';
 import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoService } from './todo.service';
 import { TodoEntity } from './Entity/todo.entity';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
-import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
-import { SearchTodoDto } from "./dto/search-todo.dto";
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
+import { SearchTodoDto } from './dto/search-todo.dto';
+import { SelectQueryBuilder } from 'typeorm';
 @Controller({
   path: 'todo',
   version: '2',
@@ -24,7 +26,9 @@ import { SearchTodoDto } from "./dto/search-todo.dto";
 export class TodoDBController {
   constructor(private todoService: TodoService) {}
   @Get()
-  getTodos(@Query() searchTodoDto: SearchTodoDto): Promise<TodoEntity[]> {
+  getTodos(
+    @Query() searchTodoDto: SearchTodoDto,
+  ){
     return this.todoService.findAll(searchTodoDto);
   }
 
