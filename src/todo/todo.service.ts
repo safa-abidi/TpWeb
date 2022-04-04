@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Like, Repository } from "typeorm";
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateTodoDto } from './update-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
@@ -52,6 +52,20 @@ export class TodoService {
     throw new NotFoundException(`Le todo d'id ${id} n'existe pas `);
   }
 
+  /*findAll(searchTodoDto: SearchTodoDto): Promise<TodoEntity[]> {
+    const criterias = [];
+    if (searchTodoDto.status) {
+      criterias.push({ status: searchTodoDto.status });
+    }
+    if (searchTodoDto.criteria) {
+      criterias.push({ name: Like(`%${searchTodoDto.criteria}%`) });
+      criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
+    }
+    if (criterias.length) {
+      return this.todoRepository.find({ withDeleted: true, where: criterias });
+    }
+    return this.todoRepository.find({ withDeleted: true});
+  }*/
   findAll(searchTodoDto: SearchTodoDto): Promise<TodoEntity[]> {
     const criterias = [];
     if (searchTodoDto.status) {

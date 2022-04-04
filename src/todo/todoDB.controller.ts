@@ -13,7 +13,7 @@ import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoService } from './todo.service';
 import { TodoEntity } from './Entity/todo.entity';
-import { UpdateTodoDto } from './update-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 import { SearchTodoDto } from "./dto/search-todo.dto";
