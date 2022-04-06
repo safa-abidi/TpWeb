@@ -77,6 +77,10 @@ export class TodoService {
     return this.todoRepository.find({ withDeleted: true});
   }*/
   findAll(searchTodoDto: SearchTodoDto) {
+    const take = searchTodoDto.take || 10;
+    const page = searchTodoDto.page || 1;
+    const skip = (page - 1) * take;
+
     const criterias = [];
     if (searchTodoDto.status) {
       criterias.push({ status: searchTodoDto.status });
@@ -95,10 +99,16 @@ export class TodoService {
         .orWhere('todo.description = :description', {
           description: searchTodoDto.criteria,
         })
-        .andWhere('todo.status = :status', { status: searchTodoDto.status });
+        .andWhere('todo.status = :status', { status: searchTodoDto.status })
+        .take(take)
+        .skip(skip);
       return result.getMany();
     }
-    return this.todoRepository.createQueryBuilder('todo').getMany();
+    return this.todoRepository
+      .createQueryBuilder('todo')
+      .take(take)
+      .skip(skip)
+      .getMany();
   }
 
   async stats(statsTodoDto: StatsTodoDto) {

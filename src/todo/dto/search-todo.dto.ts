@@ -7,4 +7,8 @@ export class SearchTodoDto {
   @IsOptional()
   @IsEnum(TodoStatusEnum)
   status: TodoStatusEnum;
+  @IsOptional()
+  take: number;
+  @IsOptional()
+  page: number;
 }
