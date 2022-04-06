@@ -26,9 +26,7 @@ import { SelectQueryBuilder } from 'typeorm';
 export class TodoDBController {
   constructor(private todoService: TodoService) {}
   @Get()
-  getTodos(
-    @Query() searchTodoDto: SearchTodoDto,
-  ){
+  getTodos(@Query() searchTodoDto: SearchTodoDto) {
     return this.todoService.findAll(searchTodoDto);
   }
 
