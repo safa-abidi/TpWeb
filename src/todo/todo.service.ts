@@ -1,11 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Like, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  LessThan,
+  Like,
+  MoreThan,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
+import { TodoStatusEnum } from './enums/todo-status.enum';
+import { StatsTodoDto } from './dto/stats-todo.dto';
+import { create } from 'domain';
+import { groupBy } from 'rxjs';
 
 @Injectable()
 export class TodoService {
@@ -89,5 +99,19 @@ export class TodoService {
       return result.getMany();
     }
     return this.todoRepository.createQueryBuilder('todo').getMany();
+  }
+
+  async stats(statsTodoDto: StatsTodoDto) {
+
+    console.log(statsTodoDto.date_fin);
+    const result = this.todoRepository
+      .createQueryBuilder('todo')
+      .select('status as Status')
+      .addSelect('COUNT(*) as Nombre')
+      //.where('createdAt >= :dd',{dd: Date.parse(statsTodoDto.date_debut)})
+      //.andWhere('createdAt <= :df',{df: Date.parse(statsTodoDto.date_fin)})
+      .groupBy('status')
+      .getRawMany();
+    return result;
   }
 }

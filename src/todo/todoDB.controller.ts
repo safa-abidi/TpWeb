@@ -19,6 +19,8 @@ import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
 import { SelectQueryBuilder } from 'typeorm';
+import { StatsTodoDto } from "./dto/stats-todo.dto";
+
 @Controller({
   path: 'todo',
   version: '2',
@@ -26,9 +28,7 @@ import { SelectQueryBuilder } from 'typeorm';
 export class TodoDBController {
   constructor(private todoService: TodoService) {}
   @Get()
-  getTodos(
-    @Query() searchTodoDto: SearchTodoDto,
-  ){
+  getTodos(@Query() searchTodoDto: SearchTodoDto) {
     return this.todoService.findAll(searchTodoDto);
   }
 
@@ -58,5 +58,12 @@ export class TodoDBController {
   @Get('version')
   version() {
     return '2';
+  }
+
+  @Get('stats')
+  getStats(
+    @Query() statsTodoDto: StatsTodoDto
+  ){
+    return this.todoService.stats(statsTodoDto);
   }
 }
