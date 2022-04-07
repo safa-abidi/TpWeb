@@ -102,16 +102,31 @@ export class TodoService {
   }
 
   async stats(statsTodoDto: StatsTodoDto) {
+    let result;
 
-    console.log(statsTodoDto.date_fin);
-    const result = this.todoRepository
-      .createQueryBuilder('todo')
-      .select('status as Status')
-      .addSelect('COUNT(*) as Nombre')
-      //.where('createdAt >= :dd',{dd: Date.parse(statsTodoDto.date_debut)})
-      //.andWhere('createdAt <= :df',{df: Date.parse(statsTodoDto.date_fin)})
-      .groupBy('status')
-      .getRawMany();
+    if (statsTodoDto.date_debut && statsTodoDto.date_fin) {
+      console.log(statsTodoDto.date_debut);
+      result = this.todoRepository
+        .createQueryBuilder('todo')
+        .select('status as Status')
+        .addSelect('COUNT(*) as Nombre')
+        .where('createdAt >= :dd', {
+          dd: statsTodoDto.date_debut,
+        })
+        .andWhere('createdAt <= :df', {
+          df: statsTodoDto.date_fin,
+        })
+        .groupBy('status')
+        .getRawMany();
+    } else {
+      result = this.todoRepository
+        .createQueryBuilder('todo')
+        .select('status as Status')
+        .addSelect('COUNT(*) as Nombre')
+        .groupBy('status')
+        .getRawMany();
+    }
+
     return result;
   }
 }
