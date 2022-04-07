@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { SkillEntity } from './skill.entity';
 
 @Entity()
 export class CvEntity {
@@ -34,6 +37,9 @@ export class CvEntity {
   path: string;
   @ManyToOne(() => UserEntity, (user) => user.cv)
   user: UserEntity;
+  @ManyToMany(() => SkillEntity)
+  @JoinTable()
+  skills: SkillEntity[];
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
