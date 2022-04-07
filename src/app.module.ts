@@ -7,6 +7,7 @@ import { devConfig } from './config/dev.config';
 import { prodConfig } from './config/prod.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoEntity } from './todo/Entity/todo.entity';
+import { CvsModule } from './cvs/cvs.module';
 
 @Module({
   imports: [
@@ -18,15 +19,14 @@ import { TodoEntity } from './todo/Entity/todo.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: process.env.DB_HOST,
       port: 3306,
-      username: 'root',
-      password: 'ines',
-      database: 'gl322',
-      autoLoadEntities: true,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       synchronize: true,
-      //debug: true,
     }),
+    CvsModule,
   ],
   controllers: [AppController],
   providers: [],
