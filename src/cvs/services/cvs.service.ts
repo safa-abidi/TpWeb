@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { CvEntity } from '../entities/cv.entity';
 import { CreateCvDto } from '../dto/create-cv.dto';
 import { UpdateCvDto } from '../dto/update-cv.dto';
-import { CreateSkillDto } from '../dto/create-skill.dto';
 
 @Injectable()
 export class CvsService {

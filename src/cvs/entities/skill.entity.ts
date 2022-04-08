@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -19,6 +20,11 @@ export class SkillEntity {
   @Column()
   designation: string;
   @ManyToMany(() => CvEntity, (cv) => cv.skills)
+  @JoinTable({
+    name: 'cv_skills',
+    joinColumn: { name: 'skillId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'cvId' },
+  })
   cv: CvEntity[];
   @CreateDateColumn()
   createdAt: Date;
