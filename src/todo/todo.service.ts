@@ -1,12 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+<<<<<<< HEAD
 import { Like } from 'typeorm';
+=======
+import {
+  LessThan,
+  Like,
+  MoreThan,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
+>>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
+<<<<<<< HEAD
 import { TodoRepository } from './todo.repository';
+=======
+import { TodoStatusEnum } from './enums/todo-status.enum';
+import { StatsTodoDto } from './dto/stats-todo.dto';
+import { create } from 'domain';
+import { groupBy } from 'rxjs';
+>>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
 
 @Injectable()
 export class TodoService {
@@ -102,6 +119,7 @@ export class TodoService {
       .getMany();
   }
 
+<<<<<<< HEAD
   findAllWithGenericPagination(searchTodoDto: SearchTodoDto) {
     const take = searchTodoDto.take || 10;
     const page = searchTodoDto.page || 1;
@@ -134,6 +152,34 @@ export class TodoService {
     }
     result = this.todoRepository.getPaginatedData(take, skip);
     result = builder.getMany();
+=======
+  async stats(statsTodoDto: StatsTodoDto) {
+    let result;
+
+    if (statsTodoDto.date_debut && statsTodoDto.date_fin) {
+      console.log(statsTodoDto.date_debut);
+      result = this.todoRepository
+        .createQueryBuilder('todo')
+        .select('status as Status')
+        .addSelect('COUNT(*) as Nombre')
+        .where('createdAt >= :dd', {
+          dd: statsTodoDto.date_debut,
+        })
+        .andWhere('createdAt <= :df', {
+          df: statsTodoDto.date_fin,
+        })
+        .groupBy('status')
+        .getRawMany();
+    } else {
+      result = this.todoRepository
+        .createQueryBuilder('todo')
+        .select('status as Status')
+        .addSelect('COUNT(*) as Nombre')
+        .groupBy('status')
+        .getRawMany();
+    }
+
+>>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
     return result;
   }
 }
