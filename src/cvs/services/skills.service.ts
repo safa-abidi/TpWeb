@@ -12,7 +12,7 @@ export class SkillsService {
     private readonly skillRepository: Repository<SkillEntity>,
   ) {}
   async create(createSkillDto: CreateSkillDto) {
-    return await this.skillRepository.preload(createSkillDto);
+    return await this.skillRepository.save(createSkillDto);
   }
 
   async findAll() {

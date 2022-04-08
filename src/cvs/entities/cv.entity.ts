@@ -37,8 +37,12 @@ export class CvEntity {
   path: string;
   @ManyToOne(() => UserEntity, (user) => user.cv)
   user: UserEntity;
-  @ManyToMany(() => SkillEntity)
-  @JoinTable()
+  @ManyToMany(() => SkillEntity, (skill) => skill.cv)
+  @JoinTable({
+    name: 'cv_skills',
+    joinColumn: { name: 'cvId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'skillId' },
+  })
   skills: SkillEntity[];
   @CreateDateColumn()
   createdAt: Date;

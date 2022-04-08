@@ -1,5 +1,16 @@
-import { IsDefined, IsInt, IsString, Length, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsDefined,
+  IsInt,
+  IsNumber,
+  IsString,
+  Length,
+  Max,
+  Min,
+  MinLength,
+} from 'class-validator';
 import { UserEntity } from '../entities/user.entity';
+import { SkillEntity } from '../entities/skill.entity';
 
 export class CreateCvDto {
   @IsDefined({ message: 'A necessary field $property' })
@@ -11,7 +22,8 @@ export class CreateCvDto {
   @IsInt()
   age: number;
   @IsInt()
-  @Length(8)
+  @Min(10000000)
+  @Max(99999999)
   cin: number;
   @IsString()
   job: string;
@@ -19,4 +31,6 @@ export class CreateCvDto {
   path: string;
   @IsInt()
   user: UserEntity;
+  @IsArray()
+  skills: SkillEntity[];
 }

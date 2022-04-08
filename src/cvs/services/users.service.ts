@@ -12,7 +12,7 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    return await this.userRepository.preload(createUserDto);
+    return await this.userRepository.save(createUserDto);
   }
 
   async findAll() {

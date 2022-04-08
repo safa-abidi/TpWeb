@@ -6,13 +6,17 @@ import { ConfigModule } from '@nestjs/config';
 import { devConfig } from './config/dev.config';
 import { prodConfig } from './config/prod.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoEntity } from './todo/Entity/todo.entity';
 import { CvsModule } from './cvs/cvs.module';
+import { CvEntity } from './cvs/entities/cv.entity';
+import { SkillEntity } from './cvs/entities/skill.entity';
+import { UserEntity } from './cvs/entities/user.entity';
+import { TodoEntity } from './todo/Entity/todo.entity';
 
 @Module({
   imports: [
     PremierModule,
     TodoModule,
+    CvsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [process.env.NODE_ENV == 'development' ? devConfig : prodConfig],
@@ -24,9 +28,9 @@ import { CvsModule } from './cvs/cvs.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+      autoLoadEntities: true,
       synchronize: true,
     }),
-    CvsModule,
   ],
   controllers: [AppController],
   providers: [],
