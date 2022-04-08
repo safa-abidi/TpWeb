@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Like, Repository } from 'typeorm';
+import { Like } from 'typeorm';
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
+import { TodoRepository } from './todo.repository';
 
 @Injectable()
 export class TodoService {
   constructor(
     @InjectRepository(TodoEntity)
-    private todoRepository: Repository<TodoEntity>,
+    private todoRepository: TodoRepository,
   ) {}
   addTodo(todo: Partial<TodoEntity>): Promise<TodoEntity> {
     return this.todoRepository.save(todo);
@@ -99,5 +100,40 @@ export class TodoService {
       .take(take)
       .skip(skip)
       .getMany();
+  }
+
+  findAllWithGenericPagination(searchTodoDto: SearchTodoDto) {
+    const take = searchTodoDto.take || 10;
+    const page = searchTodoDto.page || 1;
+    const skip = (page - 1) * take;
+
+    const criterias = [];
+    if (searchTodoDto.status) {
+      criterias.push({ status: searchTodoDto.status });
+    }
+    if (searchTodoDto.criteria) {
+      criterias.push({ name: Like(`%${searchTodoDto.criteria}%`) });
+      criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
+    }
+    console.log('this is ' + criterias);
+    console.log(searchTodoDto.criteria);
+    console.log(searchTodoDto.status);
+
+    const builder = this.todoRepository.createQueryBuilder('todo');
+    let result;
+
+    if (criterias.length) {
+      result = this.todoRepository.getPaginatedData(take, skip);
+      builder
+        .where('todo.name = :name', { name: searchTodoDto.criteria })
+        .orWhere('todo.description = :description', {
+          description: searchTodoDto.criteria,
+        })
+        .andWhere('todo.status = :status', { status: searchTodoDto.status });
+      return result.getMany();
+    }
+    result = this.todoRepository.getPaginatedData(take, skip);
+    result = builder.getMany();
+    return result;
   }
 }
