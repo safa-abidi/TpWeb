@@ -3,7 +3,6 @@ import { Todo } from './Model/todo.model';
 import { Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { TodoService } from './todo.service';
-import { TodoEntity } from './Entity/todo.entity';
 
 @Controller({
   path: 'todo',

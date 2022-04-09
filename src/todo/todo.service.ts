@@ -1,30 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-<<<<<<< HEAD
 import { Like } from 'typeorm';
-=======
-import {
-  LessThan,
-  Like,
-  MoreThan,
-  Repository,
-  SelectQueryBuilder,
-} from 'typeorm';
->>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
 import { TodoEntity } from './Entity/todo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
-<<<<<<< HEAD
 import { TodoRepository } from './todo.repository';
-=======
-import { TodoStatusEnum } from './enums/todo-status.enum';
 import { StatsTodoDto } from './dto/stats-todo.dto';
-import { create } from 'domain';
-import { groupBy } from 'rxjs';
->>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
-
 @Injectable()
 export class TodoService {
   constructor(
@@ -119,7 +102,6 @@ export class TodoService {
       .getMany();
   }
 
-<<<<<<< HEAD
   findAllWithGenericPagination(searchTodoDto: SearchTodoDto) {
     const take = searchTodoDto.take || 10;
     const page = searchTodoDto.page || 1;
@@ -152,7 +134,7 @@ export class TodoService {
     }
     result = this.todoRepository.getPaginatedData(take, skip);
     result = builder.getMany();
-=======
+  }
   async stats(statsTodoDto: StatsTodoDto) {
     let result;
 
@@ -178,8 +160,6 @@ export class TodoService {
         .groupBy('status')
         .getRawMany();
     }
-
->>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
     return result;
   }
 }

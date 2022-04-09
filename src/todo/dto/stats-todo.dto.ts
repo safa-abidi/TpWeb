@@ -1,6 +1,4 @@
-import { TodoStatusEnum } from '../enums/todo-status.enum';
-import { IsEnum, IsOptional } from 'class-validator';
-import { CreateDateColumn } from 'typeorm';
+import { IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class StatsTodoDto {

@@ -6,14 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { devConfig } from './config/dev.config';
 import { prodConfig } from './config/prod.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-<<<<<<< HEAD
-=======
 import { CvsModule } from './cvs/cvs.module';
-import { CvEntity } from './cvs/entities/cv.entity';
-import { SkillEntity } from './cvs/entities/skill.entity';
-import { UserEntity } from './cvs/entities/user.entity';
-import { TodoEntity } from './todo/Entity/todo.entity';
->>>>>>> 1f2ddeee6289213206791e737a2f4920aa6ec221
 
 @Module({
   imports: [

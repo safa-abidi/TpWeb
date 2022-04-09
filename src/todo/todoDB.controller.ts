@@ -7,19 +7,14 @@ import {
   Patch,
   Post,
   Query,
-  Req,
 } from '@nestjs/common';
-import { Todo } from './Model/todo.model';
-import { Request } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import { TodoService } from './todo.service';
 import { TodoEntity } from './Entity/todo.entity';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { SearchTodoDto } from './dto/search-todo.dto';
-import { SelectQueryBuilder } from 'typeorm';
-import { StatsTodoDto } from "./dto/stats-todo.dto";
+import { StatsTodoDto } from './dto/stats-todo.dto';
 
 @Controller({
   path: 'todo',
@@ -61,9 +56,7 @@ export class TodoDBController {
   }
 
   @Get('stats')
-  getStats(
-    @Query() statsTodoDto: StatsTodoDto
-  ){
+  getStats(@Query() statsTodoDto: StatsTodoDto) {
     return this.todoService.stats(statsTodoDto);
   }
 }
